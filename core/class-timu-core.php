@@ -1,7 +1,7 @@
 <?php
 /**
  * TIMU Shared Core Library
- * Version: 1.3.7
+ * Version: 1.26010121
  * Author: thisismyurl.com
  */
 
@@ -14,7 +14,7 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
         protected $plugin_icon;
         protected $menu_parent = 'options-general.php';
         protected $license_message = '';
-        public static $version = '1.3.7';
+        public static $version = '1.260101';
 
         public function __construct( $slug, $url, $group, $icon = '', $parent = 'options-general.php' ) {
             $this->plugin_slug   = $slug;
@@ -91,24 +91,7 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
                 }
             }
         }
-        
-        /**
-         * Centralized Filesystem API Initialization
-         * Provides a safe, standardized way for any plugin to handle files.
-         */
-        protected function init_fs() {
-            global $wp_filesystem;
-            if ( empty( $wp_filesystem ) ) {
-                require_once ABSPATH . 'wp-admin/includes/file.php';
-                WP_Filesystem();
-            }
-            return $wp_filesystem;
-        }
 
-        /**
-         * Standardized Action Links
-         * Uses the $menu_parent property to determine the correct link.
-         */
         public function add_plugin_action_links( $links ) {
             $is_valid = $this->is_licensed();
             $settings_url = admin_url( $this->menu_parent . '?page=' . $this->plugin_slug );
@@ -306,16 +289,109 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
             <?php
         }
 
+        protected $settings_blueprint = [];
 
+    /**
+     * Centralized Settings Registration
+     * Loops through the blueprint to register settings, sections, and fields.
+     */
+    protected function init_settings_generator( $blueprint ) {
+        $this->settings_blueprint = $blueprint;
 
+        add_action( 'admin_init', function() {
+            register_setting( $this->options_group, $this->plugin_slug . '_options', [
+                'sanitize_callback' => [ $this, 'sanitize_core_options' ]
+            ]);
 
-        protected function render_core_footer() {
-            ?>
-            <div class="clear"></div>
-            <div class="timu-footer-links" style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; color: #999; font-size: 11px;">
-                &copy; <?php echo esc_html( date('Y') ); ?> <a href="https://thisismyurl.com/" target="_blank" style="color: #999;">thisismyurl.com</a>
-            </div>
-            <?php
+            foreach ( $this->settings_blueprint as $section_id => $section ) {
+                add_settings_section( 
+                    $section_id, 
+                    $section['title'], 
+                    null, 
+                    $this->plugin_slug 
+                );
+
+                foreach ( $section['fields'] as $field_id => $args ) {
+                    add_settings_field(
+                        $field_id,
+                        $args['label'],
+                        [ $this, 'render_generated_field' ],
+                        $this->plugin_slug,
+                        $section_id,
+                        array_merge( $args, [ 'id' => $field_id ] )
+                    );
+                }
+            }
+        });
+    }
+
+    /**
+     * Universal Field Renderer
+     * Supports text, switches (checkboxes), select, and textareas.
+     */
+    public function render_generated_field( $args ) {
+        $options = $this->get_plugin_option();
+        $value   = $options[ $args['id'] ] ?? ( $args['default'] ?? '' );
+        $name    = "{$this->plugin_slug}_options[{$args['id']}]";
+
+        switch ( $args['type'] ) {
+            case 'switch':
+                echo '<label class="timu-switch">';
+                echo '<input type="checkbox" name="'.esc_attr($name).'" value="1" '.checked(1, $value, false).' />';
+                echo '<span class="timu-slider"></span></label>';
+                break;
+
+            case 'text':
+                echo '<input type="text" name="'.esc_attr($name).'" value="'.esc_attr($value).'" class="regular-text" />';
+                break;
+
+            case 'textarea':
+                echo '<textarea name="'.esc_attr($name).'" class="large-text" rows="4">'.esc_textarea($value).'</textarea>';
+                break;
+        }
+
+        if ( ! empty( $args['desc'] ) ) {
+            echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
         }
     }
+
+    /**
+     * Standardized Page Renderer
+     * Uses do_settings_sections() to output the cards and fields automatically.
+     */
+    public function render_settings_page() {
+        ?>
+        <div class="wrap timu-admin-wrap">
+            <?php $this->render_core_header(); ?>
+            <form method="post" action="options.php">
+                <?php settings_fields( $this->options_group ); ?>
+                <div id="poststuff">
+                    <div id="post-body" class="metabox-holder columns-2">
+                        <div id="post-body-content">
+                            <?php 
+                            // Wrap sections in your standard TIMU card UI
+                            foreach ( $this->settings_blueprint as $section_id => $section ) : ?>
+                                <div class="timu-card">
+                                    <div class="timu-card-header"><?php echo esc_html( $section['title'] ); ?></div>
+                                    <div class="timu-card-body">
+                                        <table class="form-table">
+                                            <?php do_settings_fields( $this->plugin_slug, $section_id ); ?>
+                                        </table>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+
+                            <?php $this->render_registration_field(); ?>
+                            <?php submit_button( null, 'primary large' ); ?>
+                        </div>
+                        <?php $this->render_core_sidebar(); ?>
+                    </div>
+                </div>
+            </form>
+            <?php $this->render_core_footer(); ?>
+        </div>
+        <?php
+
+    }
+}
 }
