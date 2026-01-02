@@ -1,6 +1,6 @@
 /**
  * TIMU Shared Core JS
- * Version: 1.1.3
+ * Version: 1.260101
  */
 jQuery(document).ready(function($) {
     'use strict';
@@ -8,22 +8,100 @@ jQuery(document).ready(function($) {
     const TIMU_Core = {
         init: function() {
             this.initColorPickers();
-            this.initToggles();
             this.initMediaUploader();
             this.initCustomInstaller();
-            this.handleToggles();
+            this.initParentChildToggles();
         },
-        initColorPickers: function() { if ($.isFunction($.fn.wpColorPicker)) { $('.timu-color-field').wpColorPicker(); } },
-        initToggles: function() { const self = this; $(document).on('change', '.timu-toggle-trigger', function() { self.handleToggles(); }); },
-        handleToggles: function() {
-            $('.timu-toggle-trigger').each(function() {
-                const target = $(this).data('target');
-                if (target) { $(this).is(':checked') ? $(target).fadeIn(200) : $(target).hide(); }
+
+        /**
+         * Initialize WordPress Color Pickers
+         */
+        initColorPickers: function() { 
+            if ($.isFunction($.fn.wpColorPicker)) { 
+                $('.timu-color-picker').wpColorPicker(); 
+            } 
+        },
+
+        /**
+         * Initialize Parent/Child Visibility Logic
+         */
+        initParentChildToggles: function() {
+            const self = this;
+            
+            // Run on page load to set initial state
+            this.handleParentChildVisibility();
+
+            // Listen for changes on any parent switch or radio button
+            $(document).on('change', '.timu-parent-control input', function() {
+                self.handleParentChildVisibility();
             });
         },
-        
-        initCustomInstaller: function() {
+
+        /**
+         * Handles hiding/showing child settings based on parent state or value
+         */
+       /**
+         * Handles hiding/showing child settings based on parent state or value
+         * updated to support cascading (grandchild) visibility.
+         */
+        handleParentChildVisibility: function() {
             const self = this;
+
+            $('.timu-child-field').each(function() {
+                const $childWrapper = $(this);
+                const parentId      = $childWrapper.data('parent');
+                const requiredValue = $childWrapper.data('parent-value');
+                const $row          = $childWrapper.closest('tr');
+
+                // 1. Find the parent input
+                let $parent = $('#' + parentId); 
+                if ($parent.length === 0) {
+                    $parent = $('input[name$="[' + parentId + ']"]:checked');
+                }
+
+                // 2. Determine parent's value
+                let currentValue = '';
+                if ($parent.is(':checkbox')) {
+                    currentValue = $parent.is(':checked') ? "1" : "0";
+                } else {
+                    currentValue = $parent.val();
+                }
+
+                // 3. New Cascading Logic: Check if the parent's OWN row is hidden
+                const $parentRow = $parent.closest('tr');
+                const isParentHidden = $parentRow.is(':hidden');
+
+                // 4. Logic check: Show only if parent is visible AND value matches
+                let shouldShow = false;
+                if (!isParentHidden) {
+                    if (requiredValue !== undefined) {
+                        if (currentValue == requiredValue) {
+                            shouldShow = true;
+                        }
+                    } else if (currentValue == "1") {
+                        shouldShow = true;
+                    }
+                }
+
+                if (shouldShow) {
+                    $row.show();
+                } else {
+                    $row.hide();
+                }
+            });
+
+            // 5. Run a second pass to ensure grandchildren of newly hidden children 
+            // also hide. This handles multiple levels of nesting.
+            if ($('.timu-child-field:visible').length !== self.lastVisibleCount) {
+                self.lastVisibleCount = $('.timu-child-field:visible').length;
+                self.handleParentChildVisibility();
+            }
+        },
+
+        /**
+         * Handles AJAX Plugin Installation from Sidebar
+         */
+        initCustomInstaller: function() {
             $(document).on('click', '.timu-install-btn', function(e) {
                 e.preventDefault();
                 const $btn = $(this);
@@ -49,7 +127,6 @@ jQuery(document).ready(function($) {
                             setTimeout(function() { location.reload(); }, 1500);
                         } else {
                             $btn.removeClass('updating-message').css('color', '#dc3232').text('Error.');
-                            console.error('TIMU Install Error:', response.data);
                             alert('Error: ' + response.data);
                         }
                     },
@@ -60,18 +137,30 @@ jQuery(document).ready(function($) {
             });
         },
 
+        /**
+         * Initialize WP Media Uploader for Custom Inputs
+         */
         initMediaUploader: function() {
             $(document).on('click', '.media_btn', function(e) {
                 e.preventDefault();
-                const btn = $(this), target = $(btn.data('target')), preview = $(btn.data('preview'));
-                const frame = wp.media({ title: 'Select Media', multiple: false }).on('select', function() {
+                const btn = $(this), 
+                      target = $(btn.data('target')), 
+                      preview = $(btn.data('preview'));
+
+                const frame = wp.media({ 
+                    title: 'Select Media', 
+                    multiple: false 
+                }).on('select', function() {
                     const asset = frame.state().get('selection').first().toJSON();
                     target.val(asset.url);
-                    if (preview.length) { preview.html('<img src="'+asset.url+'" style="max-width:100%;">'); }
+                    if (preview.length) { 
+                        preview.html('<img src="'+asset.url+'" style="max-width:100%;">'); 
+                    }
                 }).open();
             });
         }
     };
 
+    // Initialize the Core JS object
     TIMU_Core.init();
 });
