@@ -235,9 +235,31 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
         }
 
         
+        /**
+         * Adds custom action links to the plugin entry on the Plugins page.
+         * 
+         *  @param array $links Existing links.
+         *  @return array Modified links.
+         * 
+         */
         public function add_plugin_action_links( $links ) {
-            $settings_url  = admin_url( $this->menu_parent . '?page=' . $this->plugin_slug );
-            $links[] = '<a href="' . esc_url( $settings_url ) . '">Settings</a>';
+            // 1. Settings Link
+            $settings_url = admin_url( $this->menu_parent . '?page=' . $this->plugin_slug );
+            $links[] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'timu' ) . '</a>';
+
+            // 2. Dynamic Register/Support Link
+            // Check if the plugin is licensed using the core method
+            if ( $this->is_licensed() ) {
+                $label = __( 'Support', 'timu' );
+                $anchor = '#support/';
+            } else {
+                $label = __( 'Register', 'timu' );
+                $anchor = '#register/';
+            }
+
+            $external_url = 'https://thisismyurl.com/' . $this->plugin_slug . '/' . $anchor;
+            $links[] = '<a href="' . esc_url( $external_url ) . '" target="_blank">' . esc_html( $label ) . '</a>';
+
             return $links;
         }
 
