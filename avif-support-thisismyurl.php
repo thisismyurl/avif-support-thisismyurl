@@ -9,7 +9,7 @@
  * Description:         Safely enable AVIF uploads and convert existing images to AVIF format.
  * Tags:                avif, uploads, media library, optimization
  * 
- * Version:             1.26010216
+ * Version:             1.26010217
  * Requires at least:   5.3
  * Requires PHP:        7.4
  * 
@@ -130,8 +130,8 @@ class TIMU_AVIF_Support extends TIMU_Core_v1 {
 				'fields' => array(
 					'enabled'       => array(
 						'type'      => 'switch',
-						'label'     => __( 'Enable AVIF File Uploads', 'avif-support-thisismyurl' ),
-						'desc'      => __( 'Allows .avif files to be uploaded to the Media Library.', 'avif-support-thisismyurl' ),
+						'label'     => __( 'Enable AVIF Support', 'avif-support-thisismyurl' ),
+						'desc'      => __( 'Allows .avif files to be processed by this plugin.', 'avif-support-thisismyurl' ),
 						'is_parent' => true, // Triggers cascading visibility in shared-admin.js.
 						'default'   => 1,
 					),

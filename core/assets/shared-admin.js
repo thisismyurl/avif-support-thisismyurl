@@ -1,7 +1,7 @@
 /**
  * TIMU Shared Admin UI
  * Handles visibility, color pickers, media uploader, and native WP controls.
- * Version: 1.26010216
+ * Version: 1.26010217
  */
 jQuery(document).ready(function($) {
     'use strict';
