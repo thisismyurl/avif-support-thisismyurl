@@ -243,22 +243,24 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
          * 
          */
         public function add_plugin_action_links( $links ) {
-            // 1. Settings Link
             $settings_url = admin_url( $this->menu_parent . '?page=' . $this->plugin_slug );
             $links[] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'timu' ) . '</a>';
 
-            // 2. Dynamic Register/Support Link
-            // Check if the plugin is licensed using the core method
+            // The check now strictly follows the API response
             if ( $this->is_licensed() ) {
-                $label = __( 'Support', 'timu' );
+                $label  = __( 'Support', 'timu' );
                 $anchor = '#support/';
             } else {
-                $label = __( 'Register', 'timu' );
+                $label  = __( 'Register', 'timu' );
                 $anchor = '#register/';
             }
 
-            $external_url = 'https://thisismyurl.com/' . $this->plugin_slug . '/' . $anchor;
-            $links[] = '<a href="' . esc_url( $external_url ) . '" target="_blank">' . esc_html( $label ) . '</a>';
+            $links[] = sprintf(
+                '<a href="https://thisismyurl.com/%s/%s" target="_blank">%s</a>',
+                esc_attr( $this->plugin_slug ),
+                esc_attr( $anchor ),
+                esc_html( $label )
+            );
 
             return $links;
         }
@@ -277,10 +279,52 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
             }, $content );
         }
 
+        /**
+         * Checks if the plugin is currently licensed and registered for this site.
+         * * @return bool True if a valid license is detected.
+         */
         public function is_licensed() {
-            // Placeholder: Replace with actual remote check logic.
-            $this->license_message = 'Active'; 
-            return true; 
+            $key = $this->get_plugin_option( 'registration_key', '' );
+
+            if ( empty( $key ) ) {
+                $this->license_message = __( 'Unregistered', 'timu' );
+                return false; 
+            }
+
+            $cache_key = $this->plugin_slug . '_license_status';
+            $cached_status = get_transient( $cache_key );
+
+            if ( 'active' === $cached_status ) {
+                $this->license_message = __( 'Active', 'timu' );
+                return true;
+            }
+
+            // Build the request to your specific endpoint
+            $api_url = add_query_arg( array(
+                'url'  => get_site_url(),
+                'item' => $this->plugin_slug,
+                'key'  => $key
+            ), 'https://thisismyurl.com/wp-json/license-manager/v1/check/' );
+
+            $response = wp_remote_get( $api_url, array( 'timeout' => 15 ) );
+
+            if ( is_wp_error( $response ) ) {
+                $this->license_message = __( 'Connection Error', 'timu' );
+                return false;
+            }
+
+            $body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+            // Strictly check for the "active" status returned by your JSON
+            if ( isset( $body['status'] ) && 'active' === $body['status'] ) {
+                set_transient( $cache_key, 'active', 12 * HOUR_IN_SECONDS );
+                $this->license_message = __( 'Active', 'timu' );
+                return true;
+            }
+
+            // If status is "invalid" or anything else, return false
+            $this->license_message = isset( $body['message'] ) ? esc_html( $body['message'] ) : __( 'Invalid License', 'timu' );
+            return false;
         }
 
         public function sanitize_core_options( $input ) {
