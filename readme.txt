@@ -51,6 +51,36 @@ The AVIF files will remain on your server, but we recommend using the "Restore A
 == Changelog ==
 
 = 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via avif-support-thisismyurl\core
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
+* Core hierarchy updated via core\class-timu-admin.php
+
+= 1.26010217 =
 * Core hierarchy updated via avif-support-thisismyurl\core\assets
 
 = 1.26010217 =
