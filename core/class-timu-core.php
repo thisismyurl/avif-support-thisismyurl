@@ -249,10 +249,10 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
             // The check now strictly follows the API response
             if ( $this->is_licensed() ) {
                 $label  = __( 'Support', 'timu' );
-                $anchor = '#support/';
+                $anchor = '#support';
             } else {
                 $label  = __( 'Register', 'timu' );
-                $anchor = '#register/';
+                $anchor = '#register';
             }
 
             $links[] = sprintf(
