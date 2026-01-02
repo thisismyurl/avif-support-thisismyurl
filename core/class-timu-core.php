@@ -283,49 +283,54 @@ if ( ! class_exists( 'TIMU_Core_v1' ) ) {
          * Checks if the plugin is currently licensed and registered for this site.
          * * @return bool True if a valid license is detected.
          */
-        public function is_licensed() {
-            $key = $this->get_plugin_option( 'registration_key', '' );
+        To ensure the API's specific error message is displayed when a site is unregistered, you need to verify that class-timu-core.php correctly captures the message string from your JSON response and that class-timu-admin.php triggers this check before rendering the UI.
 
-            if ( empty( $key ) ) {
-                $this->license_message = __( 'Unregistered', 'timu' );
-                return false;
-            }
+1. Update the Logic in class-timu-core.php
+In your is_licensed() method, ensure the $this->license_message property is populated with the exact string returned by your API.
 
-            $cache_key = $this->plugin_slug . '_license_status';
-            $cached_status = get_transient( $cache_key );
+PHP
 
-            if ( 'active' === $cached_status ) {
-                $this->license_message = __( 'Active', 'timu' );
-                return true;
-            }
+public function is_licensed() {
+    $key = $this->get_plugin_option( 'registration_key', '' );
 
-            // Prepare the API URL dynamically
-            $api_url = add_query_arg( array(
-                'url'  => get_site_url(),
-                'item' => $this->plugin_slug,
-                'key'  => $key
-            ), 'https://thisismyurl.com/wp-json/license-manager/v1/check/' );
+    if ( empty( $key ) ) {
+        $this->license_message = __( 'Unregistered', 'timu' );
+        return false;
+    }
 
-            $response = wp_remote_get( $api_url, array( 'timeout' => 15 ) );
+    $cache_key = $this->plugin_slug . '_license_status';
+    $cached_status = get_transient( $cache_key );
 
-            if ( is_wp_error( $response ) ) {
-                $this->license_message = __( 'Connection Error', 'timu' );
-                return false;
-            }
+    if ( 'active' === $cached_status ) {
+        $this->license_message = __( 'Active', 'timu' );
+        return true;
+    }
 
-            $body = json_decode( wp_remote_retrieve_body( $response ), true );
+    $api_url = add_query_arg( array(
+        'url'  => get_site_url(),
+        'item' => $this->plugin_slug,
+        'key'  => $key
+    ), 'https://thisismyurl.com/wp-json/license-manager/v1/check/' );
 
-            // Strictly check for the "active" status from your JSON response
-            if ( isset( $body['status'] ) && 'active' === $body['status'] ) {
-                set_transient( $cache_key, 'active', 12 * HOUR_IN_SECONDS );
-                $this->license_message = __( 'Active', 'timu' );
-                return true;
-            }
+    $response = wp_remote_get( $api_url, array( 'timeout' => 15 ) );
 
-            // Handle the "invalid" status and display the specific message from the API
-            $this->license_message = isset( $body['message'] ) ? esc_html( $body['message'] ) : __( 'Invalid License', 'timu' );
-            return false;
-        }
+    if ( is_wp_error( $response ) ) {
+        $this->license_message = __( 'Connection Error', 'timu' );
+        return false;
+    }
+
+    $body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+    if ( isset( $body['status'] ) && 'active' === $body['status'] ) {
+        set_transient( $cache_key, 'active', 12 * HOUR_IN_SECONDS );
+        $this->license_message = __( 'Active', 'timu' );
+        return true;
+    }
+
+    // Capture the specific message from your API (e.g., "This site is not authorized...")
+    $this->license_message = isset( $body['message'] ) ? esc_html( $body['message'] ) : __( 'Invalid License', 'timu' );
+    return false;
+}
 
         public function sanitize_core_options( $input ) {
             delete_transient( $this->plugin_slug . '_license_status' );
