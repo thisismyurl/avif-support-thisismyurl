@@ -2,8 +2,9 @@ name: Process Plugin Assets
 on:
   push:
     paths:
-      - 'assets/icon-512x512.png'
-      - 'assets/banner-1544x500.png'
+      - 'assets/**'
+      - '.github/workflows/image-processing.yml'
+  workflow_dispatch:
 jobs:
   resize-and-compress:
     runs-on: ubuntu-latest
