@@ -58,6 +58,15 @@ AVIF support requires recent versions of the Imagick (ImageMagick 7.0.10-58+) or
 
 == Changelog ==
 
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\readme.txt
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\README.md
+
 = 1.260102 =
 * Core hierarchy updated via core
 * Core hierarchy updated via avif-support-thisismyurl\readme.txt
