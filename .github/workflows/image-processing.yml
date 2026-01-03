@@ -1,0 +1,36 @@
+name: Process Plugin Assets
+on:
+  push:
+    paths:
+      - 'assets/icon-512x512.png'
+      - 'assets/banner-1544x500.png'
+jobs:
+  resize-and-compress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Generate Icons and Banners
+        run: |
+          # Create Icons (256, 128, 64)
+          if [ -f assets/icon-512x512.png ]; then
+            convert assets/icon-512x512.png -resize 256x256 assets/icon-256x256.png
+            convert assets/icon-512x512.png -resize 128x128 assets/icon-128x128.png
+            convert assets/icon-512x512.png -resize 64x64 assets/icon-64x64.png
+          fi
+          # Create Banner (772x250)
+          if [ -f assets/banner-1544x500.png ]; then
+            convert assets/banner-1544x500.png -resize 772x250 assets/banner-772x250.png
+          fi
+
+      - name: Compress All Images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Resized Assets
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Auto-resize plugin assets [skip ci]"
+          file_pattern: 'assets/*.png'

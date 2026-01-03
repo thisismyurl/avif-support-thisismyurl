@@ -1,7 +1,7 @@
 ﻿# AVIF Support by thisismyurl
-![Version](https://img.shields.io/badge/version-1.260102-blue.svg)
+![Version](https://img.shields.io/badge/version-1.26010222-blue.svg)
 
-Supercharge your site speed with AVIF, the world’s most advanced image codec. Enable AVIF uploads, automate compression, and boost your Core Web Vitals instantly.
+Supercharge your site speed with AVIF, the world�s most advanced image codec. Enable AVIF uploads, automate compression, and boost your Core Web Vitals instantly.
 
 ## ðŸ—ºï¸ Roadmap & Activity
 

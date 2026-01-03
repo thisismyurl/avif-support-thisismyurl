@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Author:              Christopher Ross
  * Author URI:          https://thisismyurl.com/?source=avif-support-thisismyurl
@@ -9,7 +9,7 @@
  * Description:         Safely enable AVIF uploads and convert existing images to AVIF format.
  * Tags:                avif, uploads, media library, optimization
  * 
- * Version: 1.260102
+ * Version: 1.26010222
  * Requires at least:   5.3
  * Requires PHP:        7.4
  * 

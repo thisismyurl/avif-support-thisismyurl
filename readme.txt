@@ -1,4 +1,4 @@
-ï»¿=== AVIF Support by thisismyurl ===
+=== AVIF Support by thisismyurl ===
 Contributors: thisismyurl
 Author: thisismyurl
 Author URI: https://thisismyurl.com/
@@ -7,19 +7,19 @@ Support Link: https://thisismyurl.com/contact/
 Tags: avif, optimization, speed, image-optimizer, performance, next-gen
 Requires at least: 5.3
 Tested up to: 6.4
-Stable tag: 1.260102
+Stable tag: 1.26010222
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 GitHub Plugin URI: https://github.com/thisismyurl/thisismyurl-avif-support/
 Primary Branch: main
 
-Supercharge your site speed with AVIF, the worldâ€™s most advanced image codec. Enable AVIF uploads, automate compression, and boost your Core Web Vitals instantly.
+Supercharge your site speed with AVIF, the world’s most advanced image codec. Enable AVIF uploads, automate compression, and boost your Core Web Vitals instantly.
 
 == Description ==
 
 **AVIF Support by thisismyurl.com** is a lightweight, performance-first utility designed to make your WordPress site faster, leaner, and more modern.
 
-AVIF is the next generation of image compression. Based on the AV1 video codec, it offers significantly better file size reduction than WebP, JPEG, or PNGâ€”often reducing file sizes by up to 50% or more without any noticeable loss in visual quality. Smaller images mean faster load times, improved SEO rankings, and a superior experience for your visitors.
+AVIF is the next generation of image compression. Based on the AV1 video codec, it offers significantly better file size reduction than WebP, JPEG, or PNG—often reducing file sizes by up to 50% or more without any noticeable loss in visual quality. Smaller images mean faster load times, improved SEO rankings, and a superior experience for your visitors.
 
 This plugin bridges the gap in WordPress by providing a fully automated workflow for image optimization as soon as you upload them.
 
@@ -57,6 +57,75 @@ Visit [https://thisismyurl.com/avif-support-thisismyurl/#register](https://thisi
 AVIF support requires recent versions of the Imagick (ImageMagick 7.0.10-58+) or GD (PHP 8.1+) libraries. You can check your compatibility under **Tools > Site Health** in your WordPress dashboard.
 
 == Changelog ==
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\readme.txt
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\readme.txt
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\2682333820516292531891922458163187249407.ico
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\icons\code-active.ico
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core
+
+= 1.26010222 =
+* Core hierarchy updated via core\assets\shared-bulk.js
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\readme.txt
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\icons
+
+= 1.26010222 =
+* Core hierarchy updated via Initial Launch
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\run_sync.bat
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\icons\git-push.ico
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
+
+= 1.26010222 =
+* Core hierarchy updated via avif-support-thisismyurl\core\assets\shared-admin.css
+
+= 1.26010222 =
+* Core hierarchy updated via core\assets\shared-admin.css
+
+= 1.26010222 =
+* Core hierarchy updated via Initial Launch
+
+= 1.26010222 =
+* Core hierarchy updated via Initial Launch
 
 = 1.260102 =
 * Core hierarchy updated via avif-support-thisismyurl\avif-support-thisismyurl.php
