@@ -1,4 +1,4 @@
-=== AVIF Support by thisismyurl ===
+﻿=== AVIF Support by thisismyurl ===
 Contributors: thisismyurl
 Author: thisismyurl
 Author URI: https://thisismyurl.com/
