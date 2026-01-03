@@ -2,7 +2,7 @@
 
 # AVIF Support by thisismyurl
 ![Version](https://img.shields.io/badge/version-1.26010222-blue.svg)
-🔗 **[Plugin Homepage](https://thisismyurl.com/avif-support-thisismyurl/#register)**
+🔗 **[Register](https://thisismyurl.com/avif-support-thisismyurl/#register)**
 
 **AVIF Support by thisismyurl.com** is a lightweight, performance-first utility designed to make your WordPress site faster, leaner, and more modern.
 
@@ -28,16 +28,13 @@ This plugin bridges the gap in WordPress by providing a fully automated workflow
 3. Navigate to **Tools > AVIF Support** to access the optimization dashboard.
 
 ## ❓ FAQ
-= Is this plugin free? =
+### Is this plugin free?
 Yes! The **AVIF Support by thisismyurl.com** plugin is 100% free to download and use. We believe every website should have access to next-gen performance.
-
-= Why should I register for support? =
+### Why should I register for support?
 While the plugin is free, registering your copy allows you to access priority technical assistance and receive automatic updates directly in your dashboard. Registration helps us continue to maintain and improve the software for the community.
-
-= How do I register? =
+### How do I register?
 Visit [https://thisismyurl.com/avif-support-thisismyurl/#register](https://thisismyurl.com/avif-support-thisismyurl/#register) to sign up. Once you have your key, enter it into the "License Key" field in the plugin settings to unlock professional support.
-
-= Does my server support AVIF? =
+### Does my server support AVIF?
 AVIF support requires recent versions of the Imagick (ImageMagick 7.0.10-58+) or GD (PHP 8.1+) libraries. You can check your compatibility under **Tools > Site Health** in your WordPress dashboard.
 
 ## 🗺️ Roadmap & Activity
